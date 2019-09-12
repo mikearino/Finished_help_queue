@@ -19,8 +19,8 @@ class App extends React.Component {
     this.handleChangingSelectedTicket = this.handleChangingSelectedTicket.bind(this);
   }
 
-  handleChangingSelectedTicket(ticket){
-    this.setState({selectedTicket: ticket});
+  handleChangingSelectedTicket(ticketId){
+    this.setState({selectedTicket: ticketId});
   }
 
   handleAddingNewTicketToList(newTicket){
@@ -33,7 +33,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.waitTimeUpdateTimer = setInterval(() =>
-    this .updateTicketElaspedWaitTime(),
+      this.updateTicketElapsedWaitTime(),
     60000
     );
   }
@@ -46,24 +46,24 @@ class App extends React.Component {
     this.setState({masterTicketList: newMasterTicketList});
   }
 
-componentWillUnmount() {
-  clearInterval(this.waitTimeUpdateTimer);
-}
-render() {
-  return (
-    <div>
-      <Header/>
-      <Switch>
-        <Route exact path='/' render={()=><TicketList ticketList={this.state.masterTicketList} />} />
-        <Route path='/newticket' render={() => <NewTicketControl onNewTicketCreation={this.handleAddingNewTicketToList}/>} />
-        <Route path='/admin' render={(props)=><Admin ticketList={this.state.masterTicketList} currentRouterPath={props.location.pathname}
-        onTicketSelection={this.handleChangingSelectedTicket}
-        selectedTicket={this.state.selectedTicket}/>} />
-        <Route component={Error404} />
-      </Switch>
-    </div>
-  );
-}
+  componentWillUnmount() {
+    clearInterval(this.waitTimeUpdateTimer);
+  }
+  render() {
+    return (
+      <div>
+        <Header/>
+        <Switch>
+          <Route exact path='/' render={()=><TicketList ticketList={this.state.masterTicketList} />} />
+          <Route path='/newticket' render={() => <NewTicketControl onNewTicketCreation={this.handleAddingNewTicketToList}/>} />
+          <Route path='/admin' render={(props)=><Admin ticketList={this.state.masterTicketList} currentRouterPath={props.location.pathname}
+            onTicketSelection={this.handleChangingSelectedTicket}
+            selectedTicket={this.state.selectedTicket}/>} />
+          <Route component={Error404} />
+        </Switch>
+      </div>
+    );
+  }
 
 
 }
