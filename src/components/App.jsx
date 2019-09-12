@@ -12,7 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      masterTicketList: [],
+      masterTicketList: {},
       selectedTicket: null
     };
     this.handleAddingNewTicketToList = this.handleAddingNewTicketToList.bind(this);
@@ -24,9 +24,10 @@ class App extends React.Component {
   }
 
   handleAddingNewTicketToList(newTicket){
-    var newMasterTicketList = this.state.masterTicketList.slice();
-    newTicket.formattedWaitTime = (newTicket.timeOpen).fromNow(true)
-    newMasterTicketList.push(newTicket);
+    var newMasterTicketList = Object.assign({}, this.state.masterTicketList, {
+      [newTicket.id]: newTicket
+    });
+    newMasterTicketList[newTicket.id].formattedWaitTime = newMasterTicketList[newTicket.id].timeOpen.fromNow(true);
     this.setState({masterTicketList: newMasterTicketList});
   }
 
@@ -37,14 +38,13 @@ class App extends React.Component {
     );
   }
 
-updateTicketElaspedWaitTime() {
-  console.log("check");
-  let newMasterTicketList = this.state.masterTicketList.slice();
-  newMasterTicketList.forEach((ticket) =>
-  ticket.formattedWaitTime = (ticket.timeOpen).fromNow(true)
-);
-this.setState({masterTicketList: newMasterTicketList})
-}
+  updateTicketElapsedWaitTime() {
+    var newMasterTicketList = Object.assign({}, this.state.masterTicketList);
+    Object.keys(newMasterTicketList).forEach(ticketId => {
+      newMasterTicketList[ticketId].formattedWaitTime = (newMasterTicketList[ticketId].timeOpen).fromNow(true);
+    });
+    this.setState({masterTicketList: newMasterTicketList});
+  }
 
 componentWillUnmount() {
   clearInterval(this.waitTimeUpdateTimer);
