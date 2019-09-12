@@ -11,14 +11,26 @@ function Ticket(props){
   var myOtherStyle = {
     fontSize: '15px'
   };
-  return (
-    <div style={myStyle}>
+
+  const ticketInformation =
+    <div>
       <h3>{props.location} - {props.names}</h3>
       <h4>{props.formattedWaitTime}</h4>
-      <p><em style={myOtherStyle}>{props.issue}</em></p>
       <hr/>
-    </div>
-  );
+    </div>;
+  if (props.currentRouterPath === '/admin'){
+    return (
+      <div onClick={() => {props.onTicketSelection({names: props.names, location: props.location, issue: props.issue, formattedWaitTime: props.formattedWaitTime});}}>
+        {ticketInformation}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        {ticketInformation}
+      </div>
+    );
+  }
 }
 
 Ticket.propTypes = {
@@ -26,6 +38,8 @@ Ticket.propTypes = {
   location: PropTypes.string.isRequired,
   issue: PropTypes.string,
   formattedWaitTime: PropTypes.string.isRequired,
+  currentRouterPath: PropTypes.string,
+  onTicketSelection: PropTypes.func
 };
 
 export default Ticket;
